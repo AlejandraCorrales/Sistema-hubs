@@ -52,6 +52,57 @@ const db = mysql.createPool({
   port: process.env.DB_PORT
 });
 
+// Conexión a MySQL
+const db = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT
+});
+
+// ------------------ RUTA TEMPORAL PARA CREAR TABLAS ------------------
+app.get("/crear-tablas", async (req, res) => {
+  try {
+    // Tabla login
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS login (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        usuario VARCHAR(50),
+        password VARCHAR(255)
+      )
+    `);
+
+    // Tabla usuarios
+    await db.query(`
+      CREATE TABLE IF NOT EXISTS usuarios (
+        id INT AUTO_INCREMENT PRIMARY KEY,
+        nombre VARCHAR(100),
+        folio VARCHAR(50),
+        estado VARCHAR(50),
+        hub VARCHAR(50),
+        expediente VARCHAR(50),
+        fotografia VARCHAR(255),
+        ref_nombre VARCHAR(100),
+        ref_telefono VARCHAR(50),
+        ref_direccion VARCHAR(255)
+      )
+    `);
+
+    // Usuario de prueba
+    await db.query(`
+      INSERT INTO login (usuario, password)
+      VALUES ('admin', '12345')
+    `);
+
+    res.send("✅ Tablas creadas y usuario de prueba agregado");
+  } catch (err) {
+    console.error(err);
+    res.status(500).send("❌ Error al crear tablas");
+  }
+});
+
+
 // ------------------ RUTA AGREGAR ------------------
 app.post("/agregar", upload.single("fotografia"), async (req, res) => {
   try {
@@ -71,8 +122,8 @@ const { nombre, estado, hub, expediente, ref_nombre, ref_telefono, ref_direccion
 
     // Insertar usuario en la BD
     await db.query(
-  "INSERT INTO usuarios (nombre, folio, estado, hub, expediente, fotografia, ref_nombre, num_ref) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
-  [nombre, folio, estado, hub, expediente, fotoUrl, ref_nombre, ref_telefono, ref_direccion]
+ "INSERT INTO usuarios (nombre, folio, estado, hub, expediente, fotografia, ref_nombre, ref_telefono, ref_direccion) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
+[nombre, folio, estado, hub, expediente, fotoUrl, ref_nombre, ref_telefono, ref_direccion]
 );
 
 
@@ -97,10 +148,10 @@ const { nombre, estado, hub, expediente, ref_nombre, ref_telefono, ref_direccion
 app.get("/buscar/:folio", async (req, res) => {
   try {
     const folio = req.params.folio;
-    const [rows] = await db.query(
-"SELECT nombre, folio, estado, hub, expediente, fotografia, ref_nombre, num_ref FROM usuarios WHERE folio = ?"
-      [folio]
-    );
+   const [rows] = await db.query(
+  "SELECT nombre, folio, estado, hub, expediente, fotografia, ref_nombre, num_ref, ref_telefono, ref_direccion FROM usuarios WHERE folio = ?",
+  [folio]
+);
 
     if (rows.length === 0) {
       return res.json({ success: false, message: "No se encontró el número de cliente" });

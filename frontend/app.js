@@ -1,4 +1,4 @@
-const API = "http://localhost:3000";
+const API = "sistema-hubs-production.up.railway.app";
 
 async function login() {
   const usuario = document.getElementById("usuario").value;
