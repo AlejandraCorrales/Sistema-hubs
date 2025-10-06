@@ -52,15 +52,6 @@ const db = mysql.createPool({
   port: process.env.DB_PORT
 });
 
-// Conexión a MySQL
-const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT
-});
-
 // ------------------ RUTA TEMPORAL PARA CREAR TABLAS ------------------
 app.get("/crear-tablas", async (req, res) => {
   try {
