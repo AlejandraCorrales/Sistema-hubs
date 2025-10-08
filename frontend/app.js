@@ -1,5 +1,5 @@
 const API = "sistema-hubs-production.up.railway.app";
-const port = process.env.PORT || 3306;
+const port = process.env.PORT || 3000;
 async function login() {
   const usuario = document.getElementById("usuario").value;
   const password = document.getElementById("password").value;
