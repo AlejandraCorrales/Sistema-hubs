@@ -114,8 +114,8 @@ const { nombre, estado, hub, expediente, ref_nombre, ref_telefono, ref_direccion
 
     // Insertar usuario en la BD
     await db.query(
- "INSERT INTO usuarios (nombre, folio, estado, hub, expediente, fotografia, ref_nombre, ref_telefono, ref_direccion) VALUES (?, ?, ?, ?, ?, ?, ?, ?, ?)",
-[nombre, folio, estado, hub, expediente, fotoUrl, ref_nombre, ref_telefono, ref_direccion]
+"INSERT INTO usuarios (nombre, folio, estado, hub, expediente, fotografia, ref_nombre, num_ref) VALUES (?, ?, ?, ?, ?, ?, ?, ?)",
+[nombre, folio, estado, hub, expediente, fotoUrl, ref_nombre, num_ref]
 );
 
 
@@ -127,9 +127,8 @@ const { nombre, estado, hub, expediente, ref_nombre, ref_telefono, ref_direccion
     estado, 
     hub, 
     expediente, 
-    fotografia_url: rows[0].fotografia,
-      ref_nombre: rows[0].ref_nombre,
-      num_ref: rows[0].num_ref,
+    ref_nombre,
+    num_ref,
     fotografia_url: fotoUrl 
   }
 });
@@ -144,7 +143,7 @@ app.get("/buscar/:folio", async (req, res) => {
   try {
     const folio = req.params.folio;
    const [rows] = await db.query(
-  "SELECT nombre, folio, estado, hub, expediente, fotografia, ref_nombre, num_ref, ref_telefono, ref_direccion FROM usuarios WHERE folio = ?",
+ "SELECT nombre, folio, estado, hub, expediente, fotografia, ref_nombre, num_ref FROM usuarios WHERE folio = ?",
   [folio]
 );
 
@@ -153,17 +152,16 @@ app.get("/buscar/:folio", async (req, res) => {
     }
 
     res.json({
-      success: true,
-      usuario: {
-  nombre: rows[0].nombre,
-  folio: rows[0].folio,
-  estado: rows[0].estado,
-  hub: rows[0].hub,
-  expediente: rows[0].expediente,
-  fotografia_url: rows[0].fotografia,
-  ref_nombre: rows[0].ref_nombre,
-  ref_telefono: rows[0].ref_telefono,
-  ref_direccion: rows[0].ref_direccion
+     success: true,
+usuario: {
+ nombre: rows[0].nombre,
+folio: rows[0].folio,
+ estado: rows[0].estado,
+ hub: rows[0].hub,
+ expediente: rows[0].expediente,
+ fotografia_url: rows[0].fotografia,
+ ref_nombre: rows[0].ref_nombre,
+ num_ref: rows[0].num_ref
 }
 
     });
