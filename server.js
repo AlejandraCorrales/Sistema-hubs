@@ -6,6 +6,7 @@ const path = require("path");
 
 const app = express();
 app.use(express.json());
+
 // Conexión a MySQL
 const db = mysql.createPool({
   host: process.env.DB_HOST,
@@ -14,6 +15,24 @@ const db = mysql.createPool({
   database: process.env.DB_NAME,
   port: process.env.DB_PORT
 });
+db.getConnection()
+    .then(connection => {
+        console.log("✅ Conexión a la base de datos exitosa.");
+        connection.release(); // Libera la conexión de prueba
+
+        // AHORA INICIAMOS EL SERVIDOR SOLO SI LA BD ESTÁ VIVA
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => {
+            console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
+        });
+    })
+    .catch(err => {
+        // Si hay un error, lo registramos y cerramos el proceso.
+        // Esto aparecerá como un error FATAL en los logs de Railway.
+        console.error("❌ FATAL: No se pudo conectar a la base de datos:", err.message);
+        process.exit(1);
+    });
+
 // habilita CORS
 app.use(cors());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -124,6 +143,9 @@ const { nombre, estado, hub, expediente, ref_nombre, ref_telefono, ref_direccion
     estado, 
     hub, 
     expediente, 
+    fotografia_url: rows[0].fotografia,
+      ref_nombre: rows[0].ref_nombre,
+      num_ref: rows[0].num_ref,
     fotografia_url: fotoUrl 
   }
 });
