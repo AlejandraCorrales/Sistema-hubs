@@ -6,7 +6,14 @@ const path = require("path");
 
 const app = express();
 app.use(express.json());
-
+// Conexión a MySQL
+const db = mysql.createPool({
+  host: process.env.DB_HOST,
+  user: process.env.DB_USER,
+  password: process.env.DB_PASSWORD,
+  database: process.env.DB_NAME,
+  port: process.env.DB_PORT
+});
 // habilita CORS
 app.use(cors());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -43,14 +50,6 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
-// Conexión a MySQL
-const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT
-});
 
 // ------------------ RUTA TEMPORAL PARA CREAR TABLAS ------------------
 app.get("/crear-tablas", async (req, res) => {
