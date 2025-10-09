@@ -1,14 +1,4 @@
 const API = "https://sistema-hubs-production.up.railway.app";
-const cors = require('cors');
-const express = require('express');
-const app = express();
-
-const corsOptions = {
-  origin: 'https://hubcolectivomariayjuana.site', 
-  optionsSuccessStatus: 200 // Para navegadores antiguos
-}
-
-app.use(cors(corsOptions));
 
 async function login() {
   const usuario = document.getElementById("usuario").value;
