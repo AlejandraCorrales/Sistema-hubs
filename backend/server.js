@@ -75,8 +75,7 @@ app.get("/crear-tablas", async (req, res) => {
         expediente VARCHAR(50),
         fotografia VARCHAR(255),
         ref_nombre VARCHAR(100),
-        ref_telefono VARCHAR(50),
-        ref_direccion VARCHAR(255)
+        num_ref VARCHAR(50)
       )
     `);
 
@@ -169,7 +168,7 @@ app.get("/buscar/:folio", async (req, res) => {
   }
 });
 
-const PORT = 3000;
+const PORT = process.env.PORT || 3000;
 app.listen(PORT, () => {
   console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
 });
