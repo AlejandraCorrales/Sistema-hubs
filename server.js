@@ -15,49 +15,11 @@ const db = mysql.createPool({
   database: process.env.DB_NAME,
   port: process.env.DB_PORT
 });
-db.getConnection()
-    .then(connection => {
-        console.log("✅ Conexión a la base de datos exitosa.");
-        connection.release(); // Libera la conexión de prueba
-
-        // AHORA INICIAMOS EL SERVIDOR SOLO SI LA BD ESTÁ VIVA
-        const PORT = process.env.PORT || 3000;
-        app.listen(PORT, () => {
-            console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
-        });
-    })
-    .catch(err => {
-        // Si hay un error, lo registramos y cerramos el proceso.
-        // Esto aparecerá como un error FATAL en los logs de Railway.
-        console.error("❌ FATAL: No se pudo conectar a la base de datos:", err.message);
-        process.exit(1);
-    });
 
 // habilita CORS
 app.use(cors());
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
 app.options("*", cors());
-
-// --- LOGIN ---
-app.post("/login", async (req, res) => {
-  try {
-    const { usuario, password } = req.body;
-    const [rows] = await db.query(
-      "SELECT * FROM login WHERE usuario = ? AND password = ?",
-      [usuario, password]
-    );
-
-    if (rows.length > 0) {
-      res.json({ success: true, message: "✅ Login correcto" });
-    } else {
-      res.json({ success: false, message: "❌ Usuario o contraseña incorrectos" });
-    }
-  } catch (err) {
-    console.error("❌ Error en login:", err);
-    res.json({ success: false, message: "Error en el servidor" });
-  }
-});
-
 // Configuración de subida de imágenes
 const storage = multer.diskStorage({
   destination: function (req, file, cb) {
@@ -68,7 +30,6 @@ const storage = multer.diskStorage({
   }
 });
 const upload = multer({ storage });
-
 
 // ------------------ RUTA TEMPORAL PARA CREAR TABLAS ------------------
 app.get("/crear-tablas", async (req, res) => {
@@ -109,6 +70,29 @@ app.get("/crear-tablas", async (req, res) => {
     res.status(500).send("❌ Error al crear tablas");
   }
 });
+
+// --- LOGIN ---
+app.post("/login", async (req, res) => {
+  try {
+    const { usuario, password } = req.body;
+    const [rows] = await db.query(
+      "SELECT * FROM login WHERE usuario = ? AND password = ?",
+      [usuario, password]
+    );
+
+    if (rows.length > 0) {
+      res.json({ success: true, message: "✅ Login correcto" });
+    } else {
+      res.json({ success: false, message: "❌ Usuario o contraseña incorrectos" });
+    }
+  } catch (err) {
+    console.error("❌ Error en login:", err);
+    res.json({ success: false, message: "Error en el servidor" });
+  }
+});
+
+
+
 
 
 // ------------------ RUTA AGREGAR ------------------
@@ -188,3 +172,20 @@ app.get("/buscar/:folio", async (req, res) => {
     res.json({ success: false, message: "Error al buscar usuario" });
   }
 });
+db.getConnection()
+    .then(connection => {
+        console.log("✅ Conexión a la base de datos exitosa.");
+        connection.release(); // Libera la conexión de prueba
+
+        // AHORA INICIAMOS EL SERVIDOR SOLO SI LA BD ESTÁ VIVA
+        const PORT = process.env.PORT || 3000;
+        app.listen(PORT, () => {
+            console.log(`✅ Servidor corriendo en http://localhost:${PORT}`);
+        });
+    })
+    .catch(err => {
+        // Si hay un error, lo registramos y cerramos el proceso.
+        // Esto aparecerá como un error FATAL en los logs de Railway.
+        console.error("❌ FATAL: No se pudo conectar a la base de datos:", err.message);
+        process.exit(1);
+    });
