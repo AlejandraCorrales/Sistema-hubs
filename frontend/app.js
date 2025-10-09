@@ -21,7 +21,7 @@ async function login() {
 
 async function buscarFolio() {
   const folio = document.getElementById("folioInput").value;
-  const res = await fetch(`${API}/buscar/${folio}`);
+  const res = await fetch(`${API_BASE}/buscar/${folio}`);
   const data = await res.json();
 
   const div = document.getElementById("resultado");
@@ -73,7 +73,7 @@ formData.append("num_ref", num_ref);
   
 
   try {
-    const res = await fetch(`${API}/agregar`, {
+    const res = await fetch(`${API_BASE}/agregar`, {
       method: "POST",
       body: formData
     });
