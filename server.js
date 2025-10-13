@@ -31,6 +31,26 @@ const storage = multer.diskStorage({
 });
 const upload = multer({ storage });
 
+// --- LOGIN ---
+app.post("/login", async (req, res) => {
+  try {
+    const { usuario, password } = req.body;
+    const [rows] = await db.query(
+      "SELECT * FROM login WHERE usuario = ? AND password = ?",
+      [usuario, password]
+    );
+
+    if (rows.length > 0) {
+      res.json({ success: true, message: "✅ Login correcto" });
+    } else {
+      res.json({ success: false, message: "❌ Usuario o contraseña incorrectos" });
+    }
+  } catch (err) {
+    console.error("❌ Error en login:", err);
+    res.json({ success: false, message: "Error en el servidor" });
+  }
+});
+
 // ------------------ RUTA TEMPORAL PARA CREAR TABLAS ------------------
 app.get("/crear-tablas", async (req, res) => {
   try {
@@ -70,28 +90,6 @@ app.get("/crear-tablas", async (req, res) => {
     res.status(500).send("❌ Error al crear tablas");
   }
 });
-
-// --- LOGIN ---
-app.post("/login", async (req, res) => {
-  try {
-    const { usuario, password } = req.body;
-    const [rows] = await db.query(
-      "SELECT * FROM login WHERE usuario = ? AND password = ?",
-      [usuario, password]
-    );
-
-    if (rows.length > 0) {
-      res.json({ success: true, message: "✅ Login correcto" });
-    } else {
-      res.json({ success: false, message: "❌ Usuario o contraseña incorrectos" });
-    }
-  } catch (err) {
-    console.error("❌ Error en login:", err);
-    res.json({ success: false, message: "Error en el servidor" });
-  }
-});
-
-
 
 
 
