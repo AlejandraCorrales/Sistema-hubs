@@ -33,7 +33,9 @@ const storage = multer.diskStorage({
  cb(null, Date.now() + path.extname(file.originalname));
  }
 });
+
 const upload = multer({ storage });
+
 // --- LOGIN ---
 app.post("/login", async (req, res) => {
   try {
