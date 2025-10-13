@@ -4,7 +4,7 @@ const multer = require("multer");
 const mysql = require("mysql2/promise");
 const path = require("path");
 const corsOptions = {
-    /
+    
     origin: 'https://hubcolectivomariayjuana.site', 
     methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
     credentials: true, 
@@ -21,22 +21,19 @@ const db = mysql.createPool({
   database: process.env.DB_NAME,
   port: process.env.DB_PORT
 });
-
-// habilita CORS
-app.use(cors());
+app.use(cors(corsOptions)); // Aplica la configuración a las peticiones normales
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.options("*", cors());
+app.options("*", cors(corsOptions)); // Aplica la configuración a las peticiones 'preflight'
 // Configuración de subida de imágenes
 const storage = multer.diskStorage({
-  destination: function (req, file, cb) {
-    cb(null, "uploads/");
-  },
-  filename: function (req, file, cb) {
-    cb(null, Date.now() + path.extname(file.originalname));
-  }
+ destination: function (req, file, cb) {
+  cb(null, "uploads/");
+ },
+ filename: function (req, file, cb) {
+ cb(null, Date.now() + path.extname(file.originalname));
+ }
 });
 const upload = multer({ storage });
-
 // --- LOGIN ---
 app.post("/login", async (req, res) => {
   try {
