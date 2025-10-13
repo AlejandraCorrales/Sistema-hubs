@@ -3,7 +3,13 @@ const cors = require("cors");
 const multer = require("multer");
 const mysql = require("mysql2/promise");
 const path = require("path");
-
+const corsOptions = {
+    /
+    origin: 'https://hubcolectivomariayjuana.site', 
+    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
+    credentials: true, 
+    optionsSuccessStatus: 200 
+};
 const app = express();
 app.use(express.json());
 
