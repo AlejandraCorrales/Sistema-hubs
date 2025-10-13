@@ -3,12 +3,23 @@ const cors = require("cors");
 const multer = require("multer");
 const mysql = require("mysql2/promise");
 const path = require("path");
+const allowedOrigins = [
+  "https://hubcolectivomariayjuana.site",
+  "https://sistema-hub-production.up.railway.app"
+];
+
 const corsOptions = {
-    
-    origin: 'https://hubcolectivomariayjuana.site', 
-    methods: 'GET,HEAD,PUT,PATCH,POST,DELETE',
-    credentials: true, 
-    optionsSuccessStatus: 200 
+  origin: function (origin, callback) {
+    // Permite solicitudes sin cabecera Origin (ej. Postman) y valida contra la lista blanca
+    if (!origin || allowedOrigins.includes(origin)) {
+      callback(null, true);
+    } else {
+      callback(new Error("Origin no permitido por CORS"));
+    }
+  },
+  methods: "GET,HEAD,PUT,PATCH,POST,DELETE",
+  credentials: true,
+  optionsSuccessStatus: 200
 };
 const app = express();
 app.use(express.json());
