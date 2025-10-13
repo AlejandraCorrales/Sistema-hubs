@@ -198,7 +198,6 @@ db.getConnection()
     })
     .catch(err => {
         // Si hay un error, lo registramos y cerramos el proceso.
-        // Esto aparecerá como un error FATAL en los logs de Railway.
         console.error("❌ FATAL: No se pudo conectar a la base de datos:", err.message);
         process.exit(1);
     });
