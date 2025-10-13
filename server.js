@@ -5,6 +5,7 @@ const mysql = require("mysql2/promise");
 const path = require("path");
 const allowedOrigins = [
   "https://hubcolectivomariayjuana.site",
+  "https://www.hubcolectivomariayjuana.site",
   "https://sistema-hub-production.up.railway.app"
 ];
 
