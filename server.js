@@ -21,10 +21,10 @@ const db = mysql.createPool({
   database: process.env.DB_NAME,
   port: process.env.DB_PORT
 });
-app.use(cors(corsOptions)); // Aplica la configuración a las peticiones normales
+app.use(cors(corsOptions)); 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
-app.options("*", cors(corsOptions)); // Aplica la configuración a las peticiones 'preflight'
-// Configuración de subida de imágenes
+app.options("*", cors(corsOptions));
+
 const storage = multer.diskStorage({
  destination: function (req, file, cb) {
   cb(null, "uploads/");
