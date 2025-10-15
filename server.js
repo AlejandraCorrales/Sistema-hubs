@@ -27,11 +27,11 @@ app.use(express.json());
 
 // Conexión a MySQL
 const db = mysql.createPool({
-  host: process.env.DB_HOST,
-  user: process.env.DB_USER,
-  password: process.env.DB_PASSWORD,
-  database: process.env.DB_NAME,
-  port: process.env.DB_PORT
+  host: process.env.DB_HOST     || process.env.MYSQLHOST,
+  user: process.env.DB_USER     || process.env.MYSQLUSER,
+  password: process.env.DB_PASSWORD || process.env.MYSQLPASSWORD,
+  database: process.env.DB_NAME || process.env.MYSQLDATABASE,
+  port: process.env.DB_PORT     || process.env.MYSQLPORT
 });
 app.use(cors(corsOptions)); 
 app.use("/uploads", express.static(path.join(__dirname, "uploads")));
@@ -66,6 +66,17 @@ app.post("/login", async (req, res) => {
     console.error("❌ Error en login:", err);
     res.json({ success: false, message: "Error en el servidor" });
   }
+});
+//ruta de prueba
+app.get("/api/test-db", (req, res) => {
+  db.query("SELECT 1 + 1 AS result", (err, results) => {
+    if (err) {
+      console.error("❌ Error al conectar con la base de datos:", err);
+      return res.status(500).json({ success: false, error: err.message });
+    }
+    console.log("✅ Conexión a la base de datos exitosa:", results);
+    res.json({ success: true, message: "Conexión exitosa con la base de datos 🚀", results });
+  });
 });
 
 // ------------------ RUTA TEMPORAL PARA CREAR TABLAS ------------------
