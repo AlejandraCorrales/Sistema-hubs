@@ -68,16 +68,31 @@ app.post("/login", async (req, res) => {
   }
 });
 //ruta de prueba
-app.get("/api/test-db", (req, res) => {
-  db.query("SELECT 1 + 1 AS result", (err, results) => {
-    if (err) {
-      console.error("❌ Error al conectar con la base de datos:", err);
-      return res.status(500).json({ success: false, error: err.message });
-    }
-    console.log("✅ Conexión a la base de datos exitosa:", results);
-    res.json({ success: true, message: "Conexión exitosa con la base de datos 🚀", results });
-  });
+app.get("/api/test-db", async (req, res) => {
+  try {
+    db.query("SELECT 1 + 1 AS result", (err, results) => {
+      if (err) {
+        console.error("❌ Error al conectar con la base de datos:", err);
+        return res.status(500).json({
+          success: false,
+          error: err.message,
+          code: err.code,
+          sqlMessage: err.sqlMessage || null
+        });
+      }
+      console.log("✅ Conexión a la base de datos exitosa:", results);
+      res.json({
+        success: true,
+        message: "Conexión exitosa con la base de datos 🚀",
+        results
+      });
+    });
+  } catch (err) {
+    console.error("⚠️ Error inesperado:", err);
+    res.status(500).json({ success: false, error: err.message });
+  }
 });
+
 
 // ------------------ RUTA TEMPORAL PARA CREAR TABLAS ------------------
 app.get("/crear-tablas", async (req, res) => {
