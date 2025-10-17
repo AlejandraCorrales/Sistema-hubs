@@ -211,10 +211,11 @@ db.getConnection()
         connection.release(); // Libera la conexión de prueba
 
         // AHORA INICIAMOS EL SERVIDOR SOLO SI LA BD ESTÁ VIVA
-        const PORT = process.env.PORT || 3000;
-        app.listen(PORT, '0.0.0.0', () => { 
-            console.log(`✅ Servidor corriendo en http://0.0.0.0:${PORT}`);
-        });
+      if (process.env.NODE_ENV !== "production") {
+  const PORT = process.env.PORT || 3000;
+  app.listen(PORT, () => console.log(`Servidor local en ${PORT}`));
+}
+module.exports = app;
     })
     .catch(err => {
         // Si hay un error, lo registramos y cerramos el proceso.
