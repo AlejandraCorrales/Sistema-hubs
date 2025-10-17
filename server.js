@@ -3,6 +3,8 @@ const cors = require("cors");
 const multer = require("multer");
 const mysql = require("mysql2/promise");
 const path = require("path");
+const app = express();
+app.use(express.json());
 const allowedOrigins = [
   "https://hubcolectivomariayjuana.site",
   "https://www.hubcolectivomariayjuana.site",
@@ -24,8 +26,7 @@ const corsOptions = {
   credentials: true,
   optionsSuccessStatus: 200
 };
-const app = express();
-app.use(express.json());
+
 
 // Conexión a MySQL
 const db = mysql.createPool({
