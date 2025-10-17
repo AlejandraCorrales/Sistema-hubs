@@ -6,7 +6,7 @@ const path = require("path");
 const allowedOrigins = [
   "https://hubcolectivomariayjuana.site",
   "https://www.hubcolectivomariayjuana.site",
-  "https://sistema-hub-production.up.railway.app"
+  "https://proyecto-folio-qubio1ovj-alejandracorralesmuro-8459s-projects.vercel.app"
 ];
 
 const corsOptions = {
