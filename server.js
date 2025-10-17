@@ -218,10 +218,12 @@ db.getConnection()
   const PORT = process.env.PORT || 3000;
   app.listen(PORT, () => console.log(`Servidor local en ${PORT}`));
 }
-module.exports = app;
+
     })
     .catch(err => {
         // Si hay un error, lo registramos y cerramos el proceso.
         console.error("❌ FATAL: No se pudo conectar a la base de datos:", err.message);
         process.exit(1);
     });
+
+    module.exports = app;
