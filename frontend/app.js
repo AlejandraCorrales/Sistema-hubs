@@ -1,4 +1,4 @@
-const API_BASE = "proyecto-folio-qubio1ovj-alejandracorralesmuro-8459s-projects.vercel.app";
+const API_BASE = "https://proyecto-folio-qubio1ovj-alejandracorralesmuro-8459s-projects.vercel.app";
 
 async function login() {
   const usuario = document.getElementById("usuario").value;
