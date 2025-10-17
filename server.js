@@ -136,7 +136,7 @@ app.get("/crear-tablas", async (req, res) => {
 // ------------------ RUTA AGREGAR ------------------
 app.post("/agregar", upload.single("fotografia"), async (req, res) => {
   try {
-const { nombre, estado, hub, expediente, ref_nombre, ref_telefono, ref_direccion } = req.body;
+const { nombre, estado, hub, expediente, ref_nombre, num_ref } = req.body;
 
     // Contar usuarios para asignar número consecutivo
     const [rows] = await db.query("SELECT COUNT(*) AS total FROM usuarios");
