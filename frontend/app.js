@@ -4,7 +4,7 @@ async function login() {
   const usuario = document.getElementById("usuario").value;
   const password = document.getElementById("password").value;
 
-  const res = await fetch(`${API_BASE}`, {
+  const res = await fetch(`${API_BASE}/login`, {
     method: "POST",
     headers: { "Content-Type": "application/json" },
     body: JSON.stringify({ usuario, password })
