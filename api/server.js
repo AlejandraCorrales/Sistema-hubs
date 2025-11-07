@@ -30,17 +30,26 @@ const allowedOrigins = [
   "https://www.hubcolectivomariayjuana.site",
   "https://proyecto-folio-qubio1ovj-alejandracorralesmuro-8459s-projects.vercel.app",
   "http://localhost:3000",
-  "http://127.0.0.1:3000"
+  "http://127.0.0.1:3000",
 ];
 
+// ⚡ versión segura que nunca lanza error en preflight
 const corsOptions = {
-  origin: function (origin, callback) {
-    if (!origin) return callback(null, true);
-    if (allowedOrigins.includes(origin)) {
+  origin: (origin, callback) => {
+    if (!origin) {
+      // Permitir requests sin origen (como Postman, SSR, etc.)
+      return callback(null, true);
+    }
+
+    const isAllowed =
+      allowedOrigins.includes(origin) || origin.endsWith(".vercel.app");
+
+    if (isAllowed) {
       callback(null, true);
     } else {
-      console.warn("❌ Bloqueado por CORS:", origin);
-      callback(new Error("CORS policy: origin not allowed"), false);
+      console.log("🚫 Origen bloqueado por CORS:", origin);
+      // 👇 En lugar de error, solo no añade el header CORS
+      callback(null, false);
     }
   },
   credentials: true,
@@ -50,12 +59,17 @@ const corsOptions = {
     "Authorization",
     "X-Requested-With",
     "Accept",
-    "Origin"
-  ]
+    "Origin",
+  ],
+  optionsSuccessStatus: 200, // <--- crucial para Vercel / Chrome
 };
 
+// Aplica globalmente
 app.use(cors(corsOptions));
-app.options("*", cors(corsOptions)); // muy importante
+
+// 🔥 MUY IMPORTANTE
+app.options("*", cors(corsOptions));
+
 // ------------------ CONEXIÓN MYSQL ------------------
 console.log("🔍 Variables de entorno detectadas:");
 console.log("DB_HOST:", process.env.DB_HOST);
