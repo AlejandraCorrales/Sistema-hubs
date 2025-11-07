@@ -69,7 +69,21 @@ app.use(cors(corsOptions));
 
 // 🔥 MUY IMPORTANTE
 app.options("*", cors(corsOptions));
-
+// ⚡ Agregar este middleware para debug y control de preflight
+app.use((req, res, next) => {
+  if (req.method === "OPTIONS") {
+    console.log("🛰️ Preflight request detectada desde:", req.headers.origin);
+    res.header("Access-Control-Allow-Origin", req.headers.origin || "*");
+    res.header("Access-Control-Allow-Methods", "GET, POST, PUT, DELETE, OPTIONS");
+    res.header(
+      "Access-Control-Allow-Headers",
+      "Content-Type, Authorization, X-Requested-With, Accept, Origin"
+    );
+    res.sendStatus(200);
+  } else {
+    next();
+  }
+});
 // ------------------ CONEXIÓN MYSQL ------------------
 console.log("🔍 Variables de entorno detectadas:");
 console.log("DB_HOST:", process.env.DB_HOST);
