@@ -1,0 +1,119 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Sistema de Modo Avión</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+<body>
+  <!-- LOGIN -->
+  <div id="login">
+    <h2>Iniciar Sesión</h2>
+    <input type="text" id="usuario" placeholder="Usuario">
+    <input type="password" id="password" placeholder="Contraseña">
+    <button onclick="login()">Entrar</button>
+    <p id="loginMsg"></p>
+  </div>
+
+  <!-- SISTEMA PRINCIPAL -->
+  <div id="sistema" style="display:none;">
+    <h1>Sistema de Modo Avión</h1>
+
+    <!-- NAV TABS -->
+    <div class="tabs">
+      <button class="tab-button active" onclick="openTab('buscar')">🔎 Buscar Folio</button>
+      <button class="tab-button" onclick="openTab('agregar')">➕ Agregar Usuario</button>
+    </div>
+
+    <!-- SECCION BUSCAR -->
+    <div id="buscar" class="tab-content active">
+  <div class="card">
+    <h2>Buscar Número de Cliente</h2>
+    <input type="text" id="folioInput" placeholder="Ingresar número de cliente (ej. NC1234DG)">
+    <button onclick="buscarFolio()">Buscar</button>
+    <button type="button" onclick="limpiarCampos2()">Limpiar</button>
+    <div id="resultado"></div>
+  </div>
+</div>
+
+    <!-- SECCION AGREGAR -->
+    <div id="agregar" class="tab-content">
+      <div class="card">
+        <h2>Agregar nuevo usuario</h2>
+        <form id="formAgregar" enctype="multipart/form-data">
+          <label>Nombre completo:</label>
+          <input type="text" id="nombre" name="nombre" required>
+
+          <label>Fotografía:</label>
+          <input type="file" id="foto" name="fotografia" accept="image/*" required>
+
+          <label>Estado:</label>
+<select id="estado" name="estado" required>
+  <option value="">Seleccione un estado</option>
+  <option value="AG">Aguascalientes</option>
+  <option value="BC">Baja California</option>
+  <option value="BS">Baja California Sur</option>
+  <option value="CM">Campeche</option>
+  <option value="CS">Chiapas</option>
+  <option value="CH">Chihuahua</option>
+  <option value="CO">Coahuila</option>
+  <option value="CL">Colima</option>
+  <option value="DG">Durango</option>
+  <option value="GT">Guanajuato</option>
+  <option value="GR">Guerrero</option>
+  <option value="HG">Hidalgo</option>
+  <option value="JC">Jalisco</option>
+  <option value="MX">México</option>
+  <option value="MC">Michoacán</option>
+  <option value="MR">Morelos</option>
+  <option value="NA">Nayarit</option>
+  <option value="NL">Nuevo León</option>
+  <option value="OA">Oaxaca</option>
+  <option value="PU">Puebla</option>
+  <option value="QE">Querétaro</option>
+  <option value="QR">Quintana Roo</option>
+  <option value="SL">San Luis Potosí</option>
+  <option value="SI">Sinaloa</option>
+  <option value="SO">Sonora</option>
+  <option value="TB">Tabasco</option>
+  <option value="TM">Tamaulipas</option>
+  <option value="TL">Tlaxcala</option>
+  <option value="VE">Veracruz</option>
+  <option value="YU">Yucatán</option>
+  <option value="ZA">Zacatecas</option>
+</select>
+
+<label>Hub/Club:</label>
+<input type="text" id="hub" name="hub">
+
+<label>Número de Expediente:</label>
+<input type="text" id="expediente" name="expediente">
+
+<label>Referencia:</label>
+<label>Nombre del referente:</label>
+<input type="text" id="ref_nombre" name="ref_nombre" placeholder="Ej. Juan Pérez">
+
+<label>Codigo del referente:</label>
+<input type="text" id="num_ref" name="num_ref" placeholder="Ej. NC1234DG1">
+
+          <button type="button" onclick="agregarUsuario()">Agregar</button>
+          <button type="button" onclick="limpiarCampos()">Limpiar</button>
+        </form>
+        <p id="msg"></p>
+      </div>
+    </div>
+  </div>
+
+  <script>
+    function openTab(tabId) {
+      document.querySelectorAll(".tab-content").forEach(tab => tab.classList.remove("active"));
+      document.querySelectorAll(".tab-button").forEach(btn => btn.classList.remove("active"));
+
+      document.getElementById(tabId).classList.add("active");
+      event.target.classList.add("active");
+    }
+  </script>
+
+  <script src="app.js"></script>
+</body>
+</html>
